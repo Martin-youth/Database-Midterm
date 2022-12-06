@@ -1,8 +1,13 @@
+#/home/centos/docker-compose.yml
+
 version: '3'
 services:
-  mysql:
+
+# DB Container 정의
+# MySQL user,passwd, port 설정, Volume 지정
+  source:
     image: mysql:8.0
-    container_name: mysql4
+    container_name: source
     ports:
       - 3306:3306
     environment:
@@ -15,12 +20,16 @@ services:
     volumes:
       - /home/centos/mysql_volume
 
+# Zookeeper Container 정의
+# Zookeeper port 설정
   zookeeper:
     container_name: zookeeper
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
 
+# kafka Container 정의
+# port 및 환경 설정, Volume 지정
   kafka:
     container_name: kafka
     image: wurstmeister/kafka
@@ -35,9 +44,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-  mysql-sink:
+# mysql-sink Container 정의
+# port 및 환경 설정, Volume 지정
+  target1:
     image: mysql:8.0
-    container_name: mysql-sink
+    container_name: target1
     ports:
       - 3307:3306
     environment:
@@ -48,4 +59,18 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     volumes:
-      - /home/centos/mysql_sink
+      - /home/centos/target1
+  target2:
+    image: mariadb
+    container_name: target2
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: mysqluser
+      MYSQL_PASSWORD: mysqlpw
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - /home/centos/target2
