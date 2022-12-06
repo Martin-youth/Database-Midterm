@@ -1,18 +1,18 @@
 {
-  "name": "source-test-connector",
+  "name": "source-connector",
   "config": {
     "connector.class": "io.debezium.connector.mysql.MySqlConnector",
     "tasks.max": "1",
-    "database.hostname": "mysql4",
+    "database.hostname": "source",
     "database.port": "3306",
     "database.user": "mysqluser",
     "database.password": "mysqlpw",
     "database.server.id": "184054",
     "database.server.name": "dbserver1",
     "database.allowPublicKeyRetrieval": "true",
-    "database.include.list": "testdb",
+    "database.include.list": "sourcedb",
     "database.history.kafka.bootstrap.servers": "kafka:9092",
-    "database.history.kafka.topic": "dbhistory.testdb",
+    "database.history.kafka.topic": "dbhistory.sourcedb",
     "key.converter": "org.apache.kafka.connect.json.JsonConverter",
     "key.converter.schemas.enable": "true",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
@@ -21,6 +21,7 @@
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.addTopicPrefix.type":"org.apache.kafka.connect.transforms.RegexRouter",
     "transforms.addTopicPrefix.regex":"(.*)",
-    "transforms.addTopicPrefix.replacement":"$1"
+    "transforms.addTopicPrefix.replacement":"$1",
+    "snapshot.mode": "schema_only_recovery"
   }
 }
